@@ -1,0 +1,226 @@
+$base-font-family: Arial, Helvetica, sans-serif;
+$header-bg-color: #fff;
+$title-bg-color: #CDDF1B;
+$title-color: #fff;
+$navbar-bg-color: #393E06;
+$navbar-title-color: #fff;
+$navbar-item-bg-color: #F9FBE3;
+$navbar-item-border: 1px solid #EBEDD8;
+$main-bg-color: #F1F1F1;
+$card-bg-color: #fff;
+$card-img-height: 80px;
+$card-img-width: 80px;
+$card-border: 1px solid #000;
+$footer-bg-color: #F9FBE3;
+
+@mixin grid-child-position($row-start, $row-end, $col-start, $col-end) {
+    grid-row: #{$row-start} / #{$row-end};
+    grid-column: #{$col-start} / #{$col-end};
+}
+
+@mixin rounded-img($height, $width) {
+    height: $height;
+    width: $width;
+    object-fit: contain;
+    border-radius: 50%;
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+body {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr 50px;
+    grid-template-areas: 
+            'header header header'
+            'body body body'
+            'footer footer footer';
+    height: 100vh;
+    font-family: $base-font-family;
+}
+
+header {
+    background-color: $header-bg-color;
+    grid-area: header;
+    @extend .flex-column;
+    gap: 8px;
+}
+
+.toolbar {
+    flex: 1 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 10px 0px 10px;
+}
+
+.page-title {
+    flex: 1 0 auto;
+    padding: 10px;
+    font-size: 1.5em;
+    background-color: $title-bg-color;
+    color: $title-color;
+}
+
+.page-container {
+    grid-area: body;
+    display: flex;
+}
+
+nav {
+    flex: 1 0 150px;
+    background-color: $navbar-bg-color;
+}
+
+.menu-container {
+    @extend .flex-column;
+    position: sticky;
+    top: 0;
+
+    & ul {
+        flex-grow: 1;
+        @extend .flex-column;
+
+        & li {
+            background-color: $navbar-item-bg-color;
+            border: $navbar-item-border;
+            list-style: none;
+            padding: 10px;
+        }
+    }
+}
+
+.menu-title {
+    padding: 10px;
+    text-align: center;
+    color: $navbar-title-color;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+main {
+    background-color: $main-bg-color;
+    padding: 15px 30px;
+}
+
+.list {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.card {
+    display: grid;
+    grid-template-columns: minmax(auto, 250px);
+    grid-template-rows: minmax(auto, 120px) 50px;
+    place-items: center;
+    background-color: $card-bg-color;
+    border: $card-border;
+    border-radius: 3px;
+
+    img {
+        @include grid-child-position(1, 2, 1, 2);
+        @include rounded-img($card-img-height, $card-img-width);
+    }
+}
+
+.member-name {
+    @include grid-child-position(2, 3, 1, 2);
+    text-align: center;
+}
+
+footer {
+    background-color: $footer-bg-color;
+    grid-area: footer;
+    display: flex;
+    align-items: center;
+    padding-inline: 10px;
+}
+
+@media screen and (max-width: 768px) {
+    .toolbar {
+        display: none;
+    }
+
+    .page-container {
+        flex-direction: column;
+    }
+
+    nav {
+        flex: auto;
+        position: sticky;
+        top: 0;
+    }
+
+    .menu-container {
+        flex-direction: row;
+
+        & ul {
+            flex-direction: row;
+            justify-content: space-around;
+            padding: 8px 0px;
+        }
+    }
+
+    .menu-title {
+        display: none;
+    }
+
+    main {
+        padding: 10px;
+    }
+
+    .list {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 3px;
+    }
+
+    .card {
+        grid-template-rows: 125px;
+        grid-template-columns: auto 1fr;
+        justify-items: flex-start;
+        border: none;
+        border-radius: unset;
+        padding: 10px;
+
+        img {
+            @include grid-child-position(1, 2, 1, 2);
+            margin: 10px 20px;
+        }
+    }
+
+    .member-name {
+        @include grid-child-position(1, 2, 2, 3);
+        padding: 5px;
+    }
+}
+
+@media screen and (max-width: 250px) {
+    .menu-container {
+        & ul {
+            flex-direction: column;
+            justify-content: space-around;
+            padding: unset;
+        }
+    }
+
+    .card {
+        grid-template-columns: minmax(auto, 250px);
+        grid-template-rows: minmax(auto, 120px) 50px;
+        justify-items: center;
+
+        img {
+            @include grid-child-position(1, 2, 1, 2);
+        }
+    }
+    
+    .member-name {
+        @include grid-child-position(2, 3, 1, 2);
+    }
+}
